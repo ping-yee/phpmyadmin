@@ -607,7 +607,7 @@ return [
     [
         'id' => 'InnoDB log size',
         'name' => __('InnoDB log size'),
-        'precondition' => 'innodb_buffer_pool_size > 0 && ! (IS_MARIADB && PMA_MYSQL_INT_VERSION > 100500)',
+        'precondition' => 'innodb_buffer_pool_size is defined && innodb_log_file_size is defined && innodb_log_files_in_group is defined && innodb_buffer_pool_size > 0 && ! (IS_MARIADB && PMA_MYSQL_INT_VERSION > 100500)',
         'formula' => '(innodb_log_file_size * innodb_log_files_in_group)/ innodb_buffer_pool_size * 100',
         'test' => 'value < 20 && innodb_log_file_size / (1024 * 1024) < 256',
         'issue' => __('The InnoDB log file size is not an appropriate size, in relation to the InnoDB buffer pool.'),
@@ -631,7 +631,7 @@ return [
     [
         'id' => 'InnoDB log size',
         'name' => __('InnoDB log size'),
-        'precondition' => 'innodb_buffer_pool_size > 0 && IS_MARIADB && PMA_MYSQL_INT_VERSION > 100500',
+        'precondition' => 'innodb_buffer_pool_size is defined && innodb_log_file_size is defined && innodb_buffer_pool_size > 0 && IS_MARIADB && PMA_MYSQL_INT_VERSION > 100500',
         // From MariaDB 10.5, there is 1 redo log.
         // For MariaDB 10.4 and before, the number of redo log files is configured
         // by the innodb_log_files_in_group system variable.
@@ -658,7 +658,7 @@ return [
     [
         'id' => 'Max InnoDB log size',
         'name' => __('Max InnoDB log size'),
-        'precondition' => 'innodb_buffer_pool_size > 0 && innodb_log_file_size / innodb_buffer_pool_size * 100 < 30',
+        'precondition' => 'innodb_buffer_pool_size is defined && innodb_log_file_size is defined && innodb_buffer_pool_size > 0 && innodb_log_file_size / innodb_buffer_pool_size * 100 < 30',
         'formula' => 'innodb_log_file_size / (1024 * 1024)',
         'test' => 'value > 256',
         'issue' => __('The InnoDB log file size is inadequately large.'),
@@ -679,7 +679,7 @@ return [
     [
         'id' => 'InnoDB buffer pool size',
         'name' => __('InnoDB buffer pool size'),
-        'precondition' => 'system_memory > 0',
+        'precondition' => 'innodb_buffer_pool_size is defined && system_memory is defined && system_memory > 0',
         'formula' => 'innodb_buffer_pool_size / system_memory * 100',
         'test' => 'value < 60',
         'issue' => __('Your InnoDB buffer pool is fairly small.'),
